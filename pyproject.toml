@@ -1,0 +1,32 @@
+[project]
+name = "nonebot-powertoys"
+version = "0.1.0"
+description = "funny toys powered by Nonebot2"
+authors = [
+    {name = "BalconyJH", email = "balconyjh@gmail.com"},
+]
+dependencies = [
+    "nb-cli>=1.2.5",
+    "setuptools>=68.2.2",
+    "nonebot-adapter-onebot>=2.3.1",
+    "uvicorn[standard]>=0.23.2",
+    "fastapi>=0.104.0",
+    "nonebot2>=2.1.1",
+    "nonebot-plugin-send-anything-anywhere>=0.3.2",
+    "tqdm>=4.66.1",]
+requires-python = ">=3.8, <4.0"
+readme = "README.md"
+license = {text = "MIT"}
+
+[build-system]
+requires = ["pdm-backend"]
+build-backend = "pdm.backend"
+
+[tool.nonebot]
+adapters = [
+    { name = "OneBot V12", module_name = "nonebot.adapters.onebot.v12" },
+    { name = "OneBot V11", module_name = "nonebot.adapters.onebot.v11" },
+]
+plugins = []
+plugin_dirs = ["nonebot-powertoys"]
+builtin_plugins = []
