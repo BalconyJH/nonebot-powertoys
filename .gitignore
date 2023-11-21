@@ -139,14 +139,8 @@ dmypy.json
 .pytype/
 
 # End of https://www.toptal.com/developers/gitignore/api/python
-/.idea/inspectionProfiles/profiles_settings.xml
-/.idea/inspectionProfiles/Project_Default.xml
-/.idea/.gitignore
-/.idea/misc.xml
-/.idea/modules.xml
-/.idea/nonebot-powertoys.iml
-/.idea/vcs.xml
-/.vscode/settings.json
+/.idea/
+/.vscode/
 /.env.prod
 /.env.dev
 /.pdm-python
