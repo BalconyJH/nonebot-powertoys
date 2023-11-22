@@ -1,4 +1,5 @@
 import json
+import contextlib
 from typing import List, Union, Callable, Optional
 
 from nonebot.internal.params import Depends
@@ -56,7 +57,6 @@ def get_message_img(data: Union[str, Union[V11Message, V12Message]]) -> List[str
         :param data: event.json()
     """
     img_list = []
-    print(data)
     if isinstance(data, str):
         event = json.loads(data)
         if data and (message := event.get("message")):
@@ -82,3 +82,23 @@ def image_list(msg: Optional[str] = None, contain_reply: bool = True) -> List[st
         return await _match(matcher, event, msg, get_message_img, contain_reply)
 
     return Depends(dependency)
+
+
+def is_number(s: Union[int, str]) -> bool:
+    """
+    说明:
+        检测 s 是否为数字
+    参数:
+        :param s: 文本
+    """
+    if isinstance(s, int):
+        return True
+    with contextlib.suppress(ValueError):
+        float(s)
+        return True
+    with contextlib.suppress(TypeError, ValueError):
+        import unicodedata
+
+        unicodedata.numeric(s)
+        return True
+    return False
