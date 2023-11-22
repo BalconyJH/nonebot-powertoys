@@ -1,19 +1,20 @@
 import json
-from typing import List
-from typing import Union, Optional, Callable
+from typing import List, Union, Callable, Optional
 
-from nonebot.adapters.onebot.v11 import MessageEvent as V11MessageEvent, Message as V11Message
-from nonebot.adapters.onebot.v12 import MessageEvent as V12MessageEvent, Message as V12Message
-from nonebot.internal.matcher import Matcher
 from nonebot.internal.params import Depends
+from nonebot.internal.matcher import Matcher
+from nonebot.adapters.onebot.v11 import Message as V11Message
+from nonebot.adapters.onebot.v12 import Message as V12Message
+from nonebot.adapters.onebot.v11 import MessageEvent as V11MessageEvent
+from nonebot.adapters.onebot.v12 import MessageEvent as V12MessageEvent
 
 
 async def _match(
-        matcher: Matcher,
-        event: Union[V11MessageEvent, V12MessageEvent],
-        msg: Optional[str],
-        func: Callable,
-        contain_reply: bool,
+    matcher: Matcher,
+    event: Union[V11MessageEvent, V12MessageEvent],
+    msg: Optional[str],
+    func: Callable,
+    contain_reply: bool,
 ):
     print(event.json())
     _list = func(event.message)

@@ -30,4 +30,3 @@ repos:
       - id: prettier
         types_or: [javascript, jsx, ts, tsx, markdown, yaml, json]
         stages: [commit]
-

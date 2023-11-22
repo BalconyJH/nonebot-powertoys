@@ -1,14 +1,18 @@
 import asyncio
-from typing import Union, List
+from typing import List, Union
 
 import nonebot_plugin_saa as saa
-from nonebot import on_command, logger
-from nonebot.adapters.onebot.v11 import Bot as V11Bot, MessageEvent as V11MessageEvent, Message as V11Message
-from nonebot.adapters.onebot.v12 import Bot as V12Bot, MessageEvent as V12MessageEvent, Message as V12Message
 from nonebot.params import CommandArg
+from nonebot import logger, on_command
 from nonebot.permission import SUPERUSER
 from nonebot.plugin import PluginMetadata
+from nonebot.adapters.onebot.v11 import Bot as V11Bot
+from nonebot.adapters.onebot.v12 import Bot as V12Bot
 from nonebot_plugin_saa import enable_auto_select_bot
+from nonebot.adapters.onebot.v11 import Message as V11Message
+from nonebot.adapters.onebot.v12 import Message as V12Message
+from nonebot.adapters.onebot.v11 import MessageEvent as V11MessageEvent
+from nonebot.adapters.onebot.v12 import MessageEvent as V12MessageEvent
 
 from nonebot_powertoys.utils import image_list
 
@@ -35,19 +39,16 @@ test = on_command("test", priority=1, permission=SUPERUSER, block=True)
 
 @broadcast.handle()
 async def _(
-        bot: Union[V11Bot, V12Bot],
-        event: Union[V11MessageEvent, V12MessageEvent],
-        arg: Union[V11Message, V12Message] = CommandArg(),
-        img_list: List = image_list(),
+    bot: Union[V11Bot, V12Bot],
+    event: Union[V11MessageEvent, V12MessageEvent],
+    arg: Union[V11Message, V12Message] = CommandArg(),
+    img_list: List = image_list(),
 ):
     msg = arg.extract_plain_text().strip()
     rst = []
     for img in img_list:
         rst += saa.Image(img)
-    gl = [
-        g["group_id"]
-        for g in await bot.get_group_list()
-    ]
+    gl = [g["group_id"] for g in await bot.get_group_list()]
     g_cnt = len(gl)
     cnt = 0
     error = ""
