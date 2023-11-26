@@ -3,7 +3,7 @@ name = "nonebot-powertoys"
 version = "0.1.0"
 description = "funny toys powered by Nonebot2"
 authors = [
-    {name = "BalconyJH", email = "balconyjh@gmail.com"},
+    { name = "BalconyJH", email = "balconyjh@gmail.com" },
 ]
 dependencies = [
     "nb-cli>=1.2.5",
@@ -16,10 +16,11 @@ dependencies = [
     "tqdm>=4.66.1",
     "nonebot-plugin-user>=0.1.2",
     "nonebot-plugin-orm[sqlite]>=0.6.0",
+    "nonebot-plugin-access-control>=0.8.0",
 ]
 requires-python = ">=3.8, <4.0"
 readme = "README.md"
-license = {text = "MIT"}
+license = { text = "MIT" }
 
 [build-system]
 requires = ["pdm-backend"]
@@ -30,7 +31,8 @@ adapters = [
     { name = "OneBot V12", module_name = "nonebot.adapters.onebot.v12" },
     { name = "OneBot V11", module_name = "nonebot.adapters.onebot.v11" },
 ]
-plugins = []
+plugins = ["nonebot_plugin_access_control", "nonebot_plugin_saa", "nonebot_plugin_user",
+    "nonebot_plugin_orm", "nonebot_plugin_session"]
 plugin_dirs = ["nonebot_powertoys"]
 builtin_plugins = ["echo"]
 [tool.pdm.dev-dependencies]
