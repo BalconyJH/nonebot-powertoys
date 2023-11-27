@@ -3,10 +3,13 @@ import asyncio
 import nonebot_plugin_saa as saa
 from nonebot import logger, on_command
 from nonebot.adapters import Bot, Message
+from nonebot.adapters.onebot.v11 import MessageEvent
 from nonebot.params import CommandArg
 from nonebot.permission import SUPERUSER
 from nonebot.plugin import PluginMetadata
 from nonebot_plugin_saa import enable_auto_select_bot
+from nonebot_plugin_session import extract_session
+
 
 from nonebot_powertoys.utils import image_list
 
@@ -35,10 +38,8 @@ test = on_command("test", priority=1, permission=SUPERUSER, block=True)
 async def _(
         bot: Bot,
         arg: Message = CommandArg(),
-        img_list=None,
+        img_list=image_list(),  # noqa F811
 ):
-    if img_list is None:
-        img_list = image_list()
     msg = arg.extract_plain_text().strip()
     rst = [saa.Image(img) for img in img_list]
     gl = [g["group_id"] for g in await bot.get_group_list()]
@@ -70,7 +71,9 @@ async def _(
 
 
 @test.handle()
-async def handle_func():
+async def handle_func(event: MessageEvent, bot: Bot):
     target_group = saa.TargetQQGroup(group_id=44781405)
     msg_builder = saa.MessageFactory([saa.Text("\n管理员回复\n"), saa.Mention(user_id=str(1066474894))])
     await msg_builder.send_to(target_group)
+    session = extract_session(bot, event)
+    print(session.level)
