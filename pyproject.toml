@@ -31,8 +31,7 @@ adapters = [
     { name = "OneBot V12", module_name = "nonebot.adapters.onebot.v12" },
     { name = "OneBot V11", module_name = "nonebot.adapters.onebot.v11" },
 ]
-plugins = ["nonebot_plugin_access_control", "nonebot_plugin_saa", "nonebot_plugin_user",
-    "nonebot_plugin_orm", "nonebot_plugin_session"]
+plugins = []
 plugin_dirs = ["nonebot_powertoys"]
 builtin_plugins = ["echo"]
 [tool.pdm.dev-dependencies]
