@@ -6,22 +6,31 @@ authors = [
     { name = "BalconyJH", email = "balconyjh@gmail.com" },
 ]
 dependencies = [
-    "nb-cli>=1.2.5",
-    "setuptools>=68.2.2",
-    "nonebot-adapter-onebot>=2.3.1",
-    "uvicorn[standard]>=0.23.2",
-    "fastapi>=0.104.0",
+    "nonebot-adapter-onebot~=2.4",
     "nonebot2~=2.2",
-    "nonebot-plugin-send-anything-anywhere>=0.3.2",
-    "tqdm>=4.66.1",
-    "nonebot-plugin-user>=0.1.2",
-    "nonebot-plugin-orm[sqlite]>=0.6.0",
-    "nonebot-plugin-access-control>=0.8.0",
+    "nonebot-plugin-waiter~=0.3",
+    "nonebot-plugin-send-anything-anywhere~=0.6",
+    "nonebot-plugin-user~=0.2",
+    "nonebot-plugin-orm[sqlite]~=0.7",
+    "nonebot-plugin-apscheduler~=0.4",
 ]
 requires-python = ">=3.9, <4.0"
 readme = "README.md"
 license = { text = "MIT" }
 
+[project.optional-dependencies]
+dev = [
+    "pytest-xdist~=3.5",
+    "nonebug~=0.3",
+    "pytest-asyncio~=0.23",
+    "isort~=5.13",
+    "black~=24.4",
+    "pre-commit~=3.7",
+    "flake8~=7.0",
+    "pytest-cov~=5.0",
+    "nonebot2[fastapi,httpx,websockets]~=2.2",
+    "nonebug-saa~=0.4",
+]
 [build-system]
 requires = ["pdm-backend"]
 build-backend = "pdm.backend"
@@ -34,12 +43,6 @@ adapters = [
 plugins = []
 plugin_dirs = ["nonebot_powertoys/plugins"]
 builtin_plugins = ["echo"]
-[tool.pdm.dev-dependencies]
-test = [
-    "nonebug>=0.3.5",
-    "pytest-asyncio>=0.21.1",
-    "nonebug-saa>=0.2.2",
-]
 
 [tool.black]
 line-length = 120
@@ -103,3 +106,4 @@ disableBytesTypePromotions = true
 
 [tool.pytest.ini_options]
 asyncio_mode = "strict"
+[tool.pdm]
