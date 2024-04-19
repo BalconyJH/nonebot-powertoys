@@ -109,7 +109,7 @@ class Leigod:
     async def pause_timer(self, access_token: str):
         """
         Pause the timer.
-        :param access_token： The access token for authentication.
+        :param: access_token： The access token for authentication.
         :return: True if successful, False otherwise.
         """
         if await self.timer_status(access_token):
@@ -136,3 +136,10 @@ class Leigod:
                 except (httpx.HTTPStatusError, httpx.RequestError, json.JSONDecodeError) as e:
                     logger.error(f"Error occurred: {e}")
                     return False
+
+    @staticmethod
+    async def login_status(uid: str, data: dict):
+        if uid in data:
+            return True
+        else:
+            return False
