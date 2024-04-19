@@ -1,14 +1,8 @@
 import datetime
-from typing import Union
 
 import nonebot_plugin_saa as saa
 from nonebot import on_command
-from nonebot.adapters import Message
-from nonebot.adapters.onebot.v11 import Adapter as OBV11Adapter, Bot as OBV11Bot
-from nonebot.params import CommandArg
 from nonebot.plugin import PluginMetadata
-from nonebot_powertoys.config import plugin_config
-from nonebot_plugin_saa import B
 
 __plugin_meta__ = PluginMetadata(
     name="年进度条",
@@ -25,8 +19,6 @@ __plugin_meta__ = PluginMetadata(
         "~onebot.v12",
     },
 )
-
-from nonebot_plugin_apscheduler import scheduler
 
 year_progress = on_command("年进度", priority=5, block=True)
 
@@ -54,16 +46,19 @@ def generate_progress_bar(length: int = 20):
 
 
 @year_progress.handle()
-async def _(arg: Message = CommandArg()):
+async def _():
     progress_str = generate_progress_bar()
     msg_builder = saa.MessageFactory([saa.Text(progress_str)])
     await msg_builder.finish()
 
 
-year_length = 366 if datetime.datetime.now().year % 4 == 0 and (
-            datetime.datetime.now().year % 100 != 0 or datetime.datetime.now().year % 400 == 0) else 365
+year_length = (
+    366
+    if datetime.datetime.now().year % 4 == 0
+    and (datetime.datetime.now().year % 100 != 0 or datetime.datetime.now().year % 400 == 0)
+    else 365
+)
 update_interval_hours = round((year_length / 100) * 24)
-
 
 # @scheduler.scheduled_job("interval", hour=update_interval_hours, id="progress_bar_schedules_tasks")
 # async def progress_bar_schedules_tasks():
