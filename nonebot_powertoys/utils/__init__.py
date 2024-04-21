@@ -1,6 +1,6 @@
 import json
 import contextlib
-from typing import List, Union, Callable, Optional
+from typing import Union, Callable, Optional
 
 from nonebot.internal.params import Depends
 from nonebot.internal.matcher import Matcher
@@ -12,12 +12,11 @@ from nonebot.adapters.onebot.v12 import MessageEvent as V12MessageEvent
 
 async def _match(
     matcher: Matcher,
-    event: Union[V11MessageEvent, V12MessageEvent],
+    event: V11MessageEvent,
     msg: Optional[str],
     func: Callable,
     contain_reply: bool,
 ):
-    print(event.json())
     _list = func(event.message)
     if event.reply and contain_reply:
         _list = func(event.reply.message)
@@ -49,7 +48,7 @@ def get_message_text(data: Union[str, Union[V11Message, V12Message]]) -> str:
     return result.strip()
 
 
-def get_message_img(data: Union[str, Union[V11Message, V12Message]]) -> List[str]:
+def get_message_img(data: Union[str, Union[V11Message, V12Message]]) -> list[str]:
     """
     说明:
         获取消息中所有的 图片 的链接
@@ -69,16 +68,17 @@ def get_message_img(data: Union[str, Union[V11Message, V12Message]]) -> List[str
     return img_list
 
 
-def image_list(msg: Optional[str] = None, contain_reply: bool = True) -> List[str]:
+def image_list(msg: Optional[str] = None, contain_reply: bool = True) -> list[str]:
     """
     说明:
         获取图片列表（包括回复时），含有msg时不能为空，为空时提示并结束事件
+        only for Onebotv11
     参数:
         :param msg: 提示文本
         :param contain_reply: 包含回复内容
     """
 
-    async def dependency(matcher: Matcher, event: Union[V11MessageEvent, V12MessageEvent]):
+    async def dependency(matcher: Matcher, event: V11MessageEvent):
         return await _match(matcher, event, msg, get_message_img, contain_reply)
 
     return Depends(dependency)
