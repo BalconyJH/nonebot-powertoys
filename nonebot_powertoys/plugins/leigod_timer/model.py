@@ -1,8 +1,20 @@
+from typing import Optional
+
 from pydantic import BaseModel, Field
 
 
-class ContactInfo(BaseModel):
-    mobile: str = Field(..., title="Phone number")
+class LoginInfo(BaseModel):
+    username: str = Field(..., title="Username")
+    password: str = Field(..., title="Password")
+    nn_token: str = Field(..., title="NN Token")
+    access_token: str = Field(..., title="Access Token")
+    expiry_time: int = Field(..., title="Token expiration time in seconds")
+
+    class Config:
+        extra = "ignore"
+
+
+class IPInfo(BaseModel):
     last_login_ip: str = Field(..., title="IP Address of last login")
     last_login_time: str = Field(..., title="TimeStamp of last login")
     public_ip: str = Field(..., title="Public IP Address")
@@ -23,12 +35,25 @@ class TimerInfo(BaseModel):
 
 
 class UserInfo(BaseModel):
-    account_info: ContactInfo
-    timer_info: TimerInfo
+    avatar: str = Field(..., title="Avatar URL")
+    mobile: Optional[str] = Field(None, title="Phone number")
+    email: Optional[str] = Field(None, title="Email address")
+    nickname: str = Field(..., title="Nickname")
+    region_code: str = Field(..., title="Region code")
 
     class Config:
         extra = "ignore"
 
 
-async def parse_user_info(data: dict) -> UserInfo:
-    return UserInfo(account_info=ContactInfo(**data), timer_info=TimerInfo(**data))
+class User(BaseModel):
+    login_info: Optional[LoginInfo] = Field(None, title="Login information")
+    user_info: Optional[UserInfo] = Field(None, title="User information")
+    timer_info: Optional[TimerInfo] = Field(None, title="Timer information")
+    ip_info: Optional[IPInfo] = Field(None, title="IP information")
+
+    class Config:
+        extra = "ignore"
+
+
+async def parse_user_info(data: dict) -> User:
+    return User(user_info=UserInfo(**data), timer_info=TimerInfo(**data))  # type: ignore
