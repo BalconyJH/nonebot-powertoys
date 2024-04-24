@@ -1,12 +1,13 @@
 # nonebot-powertoys
 
-## How to start
+## 就是一堆自己写的小玩具
 
-1. generate project using `nb create` .
-2. create your plugin using `nb plugin create` .
-3. writing your plugins under `nonebot_powertoys/plugins` folder.
-4. run your bot using `nb run --reload` .
+## 功能列表
 
-## Documentation
+|      插件名      |   功能    | 状态 |
+|:-------------:|:-------:|:--:|
+|   broadcast   |   大喇叭   | 🚧 |
+| leigod_timer  | 雷神加速器暂停 | 🚧 |
+| walkie_talkie |   对讲机   |✅|
+| year_progress |  年进度条   |✅|
 
-See [Docs](https://nonebot.dev/)
