@@ -5,6 +5,8 @@ from typing import Optional
 import httpx
 from nonebot import logger
 
+from nonebot_powertoys.plugins.leigod_timer.model import LoginInfo, UserInfo, User, IPInfo, TimerInfo
+
 
 class Leigod:
     def __init__(self):
@@ -16,7 +18,8 @@ class Leigod:
             # ':method':'POST',
             # ':path':'/api/user/pause',
             # ':scheme': 'https',
-            # "User-Agent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/88.0.4324.96 Safari/537.36 Edg/88.0.705.53",
+            # "User-Agent":"Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko)
+            # Chrome/88.0.4324.96 Safari/537.36 Edg/88.0.705.53",
             # "Content-Type": "application/x-www-form-urlencoded; charset=UTF-8",
             # "Connection":"keep-alive",
             # "Accept": "application/json, text/javascript, */*; q=0.01",
@@ -35,7 +38,7 @@ class Leigod:
         md5.update(string.encode(encoding="utf-8"))
         return md5.hexdigest()
 
-    async def login(self, username: str, password: str):
+    async def login(self, username: str, password: str) -> Optional[User]:
         body = {
             "username": username,
             "password": self._md5_string(password),
@@ -53,7 +56,13 @@ class Leigod:
                 json_response = response.json()
 
                 if json_response["code"] == 0:
-                    return json_response["data"]["login_info"]["access_token"]
+                    login_info = LoginInfo(
+                        username=username,
+                        password=password,
+                        **json_response["data"]["login_info"],
+                    )
+                    user_info = UserInfo(**json_response["data"]["user_info"])
+                    return User(login_info=login_info, user_info=user_info)  # type: ignore
                 else:
                     return None
             except httpx.HTTPStatusError as e:
@@ -66,7 +75,7 @@ class Leigod:
                 logger.error(f"JSONDecodeError: {e}")
                 return None
 
-    async def get_user_info(self, access_token: str) -> Optional[dict]:
+    async def get_user_info(self, access_token: str) -> Optional[User]:
         """
         Asynchronously get user info from Leigod using the provided access token.
         :param access_token: The access token for authentication.
@@ -84,15 +93,21 @@ class Leigod:
                 json_response = response.json()
 
                 if json_response["code"] == 0:
-                    return json_response["data"]
+                    return User(
+                        timer_info=TimerInfo(**json_response["data"]),
+                        ip_info=IPInfo(**json_response["data"]),
+                    )  # type: ignore
                 elif json_response["code"] == 400006:
                     logger.error("Token is invalid or has expired.")
                     return None
                 else:
                     logger.error(f"Error code from API: {json_response.get('msg', 'Unknown error')}")
                     return None
-            except (httpx.HTTPStatusError, httpx.RequestError, json.JSONDecodeError) as e:
-                logger.error(f"Error occurred: {e}")
+            except (httpx.HTTPStatusError, httpx.RequestError) as e:
+                logger.error(f"HTTP error occurred: {e}")
+                return None
+            except json.JSONDecodeError as e:
+                logger.error(f"Error decoding JSON response: {e}")
                 return None
 
     async def timer_status(self, token: str) -> bool:
@@ -101,10 +116,7 @@ class Leigod:
         :return: True if the timer is paused, False otherwise.
         """
         user_info = await self.get_user_info(token)
-        if user_info is not None and user_info.get("pause_status_id") == 1:
-            return True
-        else:
-            return False
+        return user_info is not None and user_info.timer_info is not None and user_info.timer_info.pause_status_id == 1
 
     async def pause_timer(self, access_token: str):
         """
@@ -133,8 +145,11 @@ class Leigod:
                     else:
                         logger.error(f"Error code from API: {json_response.get('msg', 'Unknown error')}")
                         return False
-                except (httpx.HTTPStatusError, httpx.RequestError, json.JSONDecodeError) as e:
-                    logger.error(f"Error occurred: {e}")
+                except (httpx.HTTPStatusError, httpx.RequestError) as e:
+                    logger.error(f"HTTP error occurred: {e}")
+                    return False
+                except json.JSONDecodeError as e:
+                    logger.error(f"Error decoding JSON response: {e}")
                     return False
 
     @staticmethod
