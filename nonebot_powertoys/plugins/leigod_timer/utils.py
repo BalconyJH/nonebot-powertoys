@@ -143,7 +143,7 @@ class Leigod:
                         logger.error("Token is invalid or has expired.")
                         return False
                     else:
-                        logger.error(f"Error code from API: {json_response.get('msg', 'Unknown error')}")
+                        logger.error(f"Error code from API: {json_response.get('code', 'Unknown error')}")
                         return False
                 except (httpx.HTTPStatusError, httpx.RequestError) as e:
                     logger.error(f"HTTP error occurred: {e}")
@@ -153,8 +153,17 @@ class Leigod:
                     return False
 
     @staticmethod
-    async def login_status(uid: str, data: dict):
-        if uid in data:
-            return True
-        else:
+    async def login_status(uid: str, data: dict) -> bool:
+        user = data.get(uid)
+        if user is None:
             return False
+        return True
+
+    @staticmethod
+    async def time_remaining(user_info: TimerInfo) -> int:
+        """
+        Get the remaining time in seconds.
+        :param user_info: The user info dict.
+        :return: The remaining time in seconds.
+        """
+        return user_info.expiry_time_samp
