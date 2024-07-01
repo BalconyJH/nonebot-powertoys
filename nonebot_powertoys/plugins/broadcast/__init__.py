@@ -1,15 +1,14 @@
 import asyncio
 
 import nonebot_plugin_saa as saa
-from nonebot import logger, on_command
-from nonebot.adapters import Bot, Message
-from nonebot.adapters.onebot.v11 import MessageEvent
 from nonebot.params import CommandArg
+from nonebot import logger, on_command
 from nonebot.permission import SUPERUSER
+from nonebot.adapters import Bot, Message
 from nonebot.plugin import PluginMetadata
-from nonebot_plugin_saa import enable_auto_select_bot
 from nonebot_plugin_session import extract_session
-
+from nonebot.adapters.onebot.v11 import MessageEvent
+from nonebot_plugin_saa import enable_auto_select_bot
 
 from nonebot_powertoys.utils import image_list
 
@@ -36,9 +35,9 @@ test = on_command("test", priority=1, permission=SUPERUSER, block=True)
 
 @broadcast.handle()
 async def _(
-        bot: Bot,
-        arg: Message = CommandArg(),
-        img_list=image_list(),  # noqa F811
+    bot: Bot,
+    arg: Message = CommandArg(),
+    img_list=image_list(),  # F811
 ):
     msg = arg.extract_plain_text().strip()
     rst = [saa.Image(img) for img in img_list]
