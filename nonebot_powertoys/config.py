@@ -4,7 +4,7 @@ from pydantic import BaseModel
 
 class ProgressBarConfig(BaseModel):
     private: bool = False
-    group:bool = False
+    group: bool = False
 
 
 class Config(BaseModel):

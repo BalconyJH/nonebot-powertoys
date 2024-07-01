@@ -1,11 +1,11 @@
-import hashlib
 import json
+import hashlib
 from typing import Optional
 
 import httpx
 from nonebot import logger
 
-from nonebot_powertoys.plugins.leigod_timer.model import LoginInfo, UserInfo, User, IPInfo, TimerInfo
+from nonebot_powertoys.plugins.leigod_timer.model import User, IPInfo, UserInfo, LoginInfo, TimerInfo
 
 
 class Leigod:

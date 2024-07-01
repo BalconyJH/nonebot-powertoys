@@ -1,12 +1,13 @@
 import json
-from typing import Optional, Union
+from typing import Union, Optional
 
+from nonebot import on_command
+import nonebot_plugin_saa as saa
+import nonebot_plugin_localstore as store
+from nonebot.plugin import PluginMetadata
 from nonebot.adapters.onebot.v11 import MessageEvent as V11MessageEvent
 from nonebot.adapters.onebot.v12 import MessageEvent as V12MessageEvent
-import nonebot_plugin_localstore as store
-import nonebot_plugin_saa as saa
-from nonebot import on_command
-from nonebot.plugin import PluginMetadata
+
 from .utils import Leigod
 
 __plugin_meta__ = PluginMetadata(
