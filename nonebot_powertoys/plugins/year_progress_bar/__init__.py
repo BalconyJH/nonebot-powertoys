@@ -1,7 +1,7 @@
 import datetime
 
-import nonebot_plugin_saa as saa
 from nonebot import on_command
+import nonebot_plugin_saa as saa
 from nonebot.plugin import PluginMetadata
 
 __plugin_meta__ = PluginMetadata(

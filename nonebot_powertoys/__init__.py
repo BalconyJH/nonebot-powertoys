@@ -6,7 +6,7 @@ require("nonebot_plugin_user")
 require("nonebot_plugin_session")
 require("nonebot_plugin_orm")
 
-import nonebot_plugin_saa  # noqa F401
+import nonebot_plugin_saa  # F401
 
 nonebot_plugin_saa.enable_auto_select_bot()
 
@@ -21,9 +21,7 @@ __plugin_meta__ = PluginMetadata(
     name=__help__plugin__name__,
     description="nonebot_powertoys",
     usage=__help__plugin__usage__,
-    supported_adapters=inherit_supported_adapters(
-        "nonebot_plugin_saa", "nonebot_plugin_user"
-    ),
+    supported_adapters=inherit_supported_adapters("nonebot_plugin_saa", "nonebot_plugin_user"),
 )
 
 driver = get_driver()
@@ -32,11 +30,12 @@ driver = get_driver()
 @driver.on_startup
 async def _():
     from nonebot_powertoys.plugins.broadcast import broadcast
-    from nonebot_powertoys.plugins.walkie_talkie import dialogue, reply
+    from nonebot_powertoys.plugins.walkie_talkie import reply, dialogue
 
     broadcast._plugin_meta = __plugin_meta__
     dialogue._plugin_meta = __plugin_meta__
     reply._plugin_meta = __plugin_meta__
 
     from .db.db_model import create_sqlite_database
+
     await create_sqlite_database()
